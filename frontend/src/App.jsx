@@ -21,7 +21,7 @@ import {
   Share2
 } from "lucide-react";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000/api";
 
 function SymbolBackground() {
   const canvasRef = useRef(null);
