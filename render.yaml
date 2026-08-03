@@ -14,15 +14,14 @@ services:
         value: 3.10.0
 
   # React Frontend Service (Static Site)
-  - type: web
+  - type: static
     name: flipbook-ai-frontend
-    env: static
     buildCommand: cd frontend && npm install && npm run build
     publishPath: frontend/dist
     routes:
       - type: rewrite
-        from: /*
-        to: /index.html
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_BASE
         value: https://flipbook-ai-backend.onrender.com/api
