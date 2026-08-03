@@ -14,10 +14,11 @@ services:
         value: 3.10.0
 
   # React Frontend Service (Static Site)
-  - type: static
+  - type: web
     name: flipbook-ai-frontend
+    runtime: static
     buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend/dist
+    staticPublishPath: frontend/dist
     routes:
       - type: rewrite
         source: /*
