@@ -21,20 +21,29 @@ def get_youtube_transcript(url: str) -> str:
     api = YouTubeTranscriptApi()
     try:
         fetched = api.fetch(video_id)
-        text = " ".join([snippet.text for snippet in fetched.snippets])
-        if text and len(text.strip()) > 50:
+        snippets = getattr(fetched, "snippets", fetched)
+        text = " ".join([getattr(s, "text", s.get("text") if isinstance(s, dict) else str(s)) for s in snippets])
+        if text and len(text.strip()) > 20:
             print("Successfully retrieved video transcript via YouTube Transcript API (Instant)!")
             return text
     except Exception as e:
         print(f"Direct API fetch failed: {e}. Trying list transcripts fallback...")
         try:
-            transcript_list = YouTubeTranscriptApi.list(video_id)
-            transcript = transcript_list.find_transcript(['en', 'en-US', 'en-IN', 'hi'])
-            fetched = transcript.fetch()
-            text = " ".join([item.text for item in fetched])
-            if text and len(text.strip()) > 50:
-                print("Successfully retrieved transcript via fallback search!")
-                return text
+            t_list = api.list(video_id)
+            transcript = None
+            try:
+                transcript = t_list.find_transcript(['en', 'en-US', 'en-IN', 'hi', 'a.en'])
+            except Exception:
+                for t in t_list:
+                    transcript = t
+                    break
+            if transcript:
+                fetched = transcript.fetch()
+                snippets = getattr(fetched, "snippets", fetched)
+                text = " ".join([getattr(s, "text", s.get("text") if isinstance(s, dict) else str(s)) for s in snippets])
+                if text and len(text.strip()) > 20:
+                    print("Successfully retrieved transcript via fallback search!")
+                    return text
         except Exception as inner_e:
             print(f"Transcript API fallback failed: {inner_e}")
             raise Exception("No transcript available via API")
