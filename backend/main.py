@@ -1,3 +1,4 @@
+import re
 from dotenv import load_dotenv
 from utils.audio_processor import process_input
 from core.transcriber import transcribe_all
@@ -5,16 +6,60 @@ from core.summarizer import summarize, generate_title
 from core.extractor import extract_action_items, extract_key_decisions, extract_questions
 from core.rag_engine import build_rag_chain, ask_question
 
-
 load_dotenv()
+
+def extract_youtube_id(url: str) -> str:
+    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})", url)
+    return match.group(1) if match else None
+
+def get_youtube_transcript(url: str) -> str:
+    from youtube_transcript_api import YouTubeTranscriptApi
+    video_id = extract_youtube_id(url)
+    if not video_id:
+        raise ValueError("Invalid YouTube URL")
+    
+    api = YouTubeTranscriptApi()
+    try:
+        fetched = api.fetch(video_id)
+        text = " ".join([snippet.text for snippet in fetched.snippets])
+        if text and len(text.strip()) > 50:
+            print("Successfully retrieved video transcript via YouTube Transcript API (Instant)!")
+            return text
+    except Exception as e:
+        print(f"Direct API fetch failed: {e}. Trying list transcripts fallback...")
+        try:
+            transcript_list = YouTubeTranscriptApi.list(video_id)
+            transcript = transcript_list.find_transcript(['en', 'en-US', 'en-IN', 'hi'])
+            fetched = transcript.fetch()
+            text = " ".join([item.text for item in fetched])
+            if text and len(text.strip()) > 50:
+                print("Successfully retrieved transcript via fallback search!")
+                return text
+        except Exception as inner_e:
+            print(f"Transcript API fallback failed: {inner_e}")
+            raise Exception("No transcript available via API")
+            
+    raise Exception("Empty transcript returned")
 
 def run_pipeline(source :str, language :str = "english", persist_dir: str = None) -> dict:
     print("starting AI Video Assistant")
 
-    chunks = process_input(source)
+    transcript = ""
+    is_youtube = source.startswith("http://") or source.startswith("https://")
+    
+    if is_youtube:
+        try:
+            print(f"Attempting instant transcript retrieval for {source}...")
+            transcript = get_youtube_transcript(source)
+        except Exception as err:
+            print(f"YouTube Transcript API unavailable ({err}). Falling back to audio download + Whisper...")
+            chunks = process_input(source)
+            transcript = transcribe_all(chunks, language)
+    else:
+        chunks = process_input(source)
+        transcript = transcribe_all(chunks, language)
 
-    transcript = transcribe_all(chunks,language)
-    print(f"raw transcription (first 300 characters ) {transcript[:300]}")
+    print(f"raw transcription (first 300 characters ): {transcript[:300]}")
 
     title = generate_title(transcript)
 
