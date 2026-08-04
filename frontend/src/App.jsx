@@ -18,7 +18,8 @@ import {
   Loader2,
   Check,
   ChevronRight,
-  Share2
+  Share2,
+  Menu
 } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000/api";
@@ -137,6 +138,7 @@ export default function App() {
   const [isIngesting, setIsIngesting] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Form Inputs
   const [sourceType, setSourceType] = useState("youtube");
@@ -440,7 +442,9 @@ export default function App() {
   ];
 
   return (
-    <div className="app-layout" style={{ gridTemplateColumns: "250px 1fr" }}>
+    <div className={`app-layout ${isSidebarOpen ? "sidebar-mobile-open" : ""}`}>
+      {/* Backdrop overlay for mobile drawer */}
+      <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
       
       {/* Simplified Left Sidebar */}
       <aside className="sidebar" style={{ background: "var(--bg-sidebar)", padding: "1rem" }}>
@@ -466,7 +470,7 @@ export default function App() {
 
         <button 
           className="new-processing-btn" 
-          onClick={() => setIsIngesting(true)}
+          onClick={() => { setIsIngesting(true); setIsSidebarOpen(false); }}
           style={{ width: "100%", margin: "0 0 1rem 0", background: "#fff", color: "#000" }}
         >
           <Plus size={14} />
@@ -479,7 +483,7 @@ export default function App() {
             <div
               key={m.id}
               className={`recent-video-link ${activeMeeting?.id === m.id && !isIngesting ? "active" : ""}`}
-              onClick={() => handleSelectMeeting(m.id)}
+              onClick={() => { handleSelectMeeting(m.id); setIsSidebarOpen(false); }}
               style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "0.5rem" }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", overflow: "hidden" }}>
@@ -507,7 +511,24 @@ export default function App() {
         <SymbolBackground />
         
         {/* Simple top info bar */}
-        <header className="top-navbar" style={{ background: "transparent", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+        <header className="top-navbar" style={{ background: "transparent", borderBottom: "1px solid rgba(255,255,255,0.03)", display: "flex", alignItems: "center" }}>
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsSidebarOpen(true)}
+            style={{ 
+              background: "transparent", 
+              border: "none", 
+              color: "var(--text-primary)", 
+              cursor: "pointer", 
+              marginRight: "0.75rem",
+              display: "none",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "0.25rem"
+            }}
+          >
+            <Menu size={18} />
+          </button>
           <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
             {isIngesting ? "" : activeMeeting ? activeMeeting.title : ""}
           </span>
