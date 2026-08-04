@@ -19,7 +19,7 @@ def download_youtube_audio(url :str) ->str:
         ],
         "extractor_args": {
             "youtube": {
-                "player_client": ["android", "ios", "mweb"]
+                "player_client": ["android_vr", "android", "ios", "mweb"]
             }
         },
         "nocheckcertificate": True,
