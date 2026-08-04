@@ -135,7 +135,7 @@ export default function App() {
   // Core Application State
   const [meetings, setMeetings] = useState([]);
   const [activeMeeting, setActiveMeeting] = useState(null);
-  const [isIngesting, setIsIngesting] = useState(false);
+  const [isIngesting, setIsIngesting] = useState(true);
   const [shareCopied, setShareCopied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -165,7 +165,7 @@ export default function App() {
 
   // Initialize
   useEffect(() => {
-    fetchMeetings(true);
+    fetchMeetings(false);
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     };
