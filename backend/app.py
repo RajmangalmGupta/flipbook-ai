@@ -131,9 +131,7 @@ def process_meeting(
     source: str = Form(...),
     language: str = Form("english")
 ):
-    """
-    Submits a meeting for processing.
-    `source` can be a YouTube URL or a local file path returned by `/api/upload`.
+    """Submits a meeting for processing."""
     src_clean = source.strip()
     is_youtube = (
         src_clean.startswith("http://") or 
@@ -202,7 +200,7 @@ def get_meeting(meeting_id: str):
 
 @app.delete("/api/meetings/{meeting_id}")
 def delete_meeting(meeting_id: str):
-    """Deletes a meeting's database entry and its vector storage files."""
+    """Deletes meeting database entry and its vector storage files."""
     db = load_db()
     if meeting_id not in db:
         raise HTTPException(status_code=404, detail="Meeting not found")
