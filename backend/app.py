@@ -56,7 +56,7 @@ def run_pipeline_task(meeting_id: str, source_path: str, is_youtube: bool, langu
     db = load_db()
     if meeting_id not in db:
         return
-        
+
     db[meeting_id]["status"] = "processing"
     save_db(db)
 
@@ -65,7 +65,7 @@ def run_pipeline_task(meeting_id: str, source_path: str, is_youtube: bool, langu
     try:
         logger.info(f"Starting background RAG pipeline for meeting {meeting_id} (source: {source_path})")
         result = run_pipeline(source_path, language=language, persist_dir=persist_dir)
-        
+
         # Update database with results
         db = load_db()
         if meeting_id in db:

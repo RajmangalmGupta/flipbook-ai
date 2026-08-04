@@ -579,21 +579,12 @@ export default function App() {
                   />
                 </div>
 
-                <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "1.4rem", marginBottom: "1.5rem", textAlign: "center" }}>
+                <h2 className="welcome-hero-title" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "1.4rem", marginBottom: "1.5rem", textAlign: "center" }}>
                   What video would you like to analyze?
                 </h2>
 
                 <form onSubmit={handleProcessSubmit} style={{ width: "100%" }}>
-                  <div style={{ 
-                    background: "rgba(255, 255, 255, 0.03)", 
-                    border: "1px solid var(--border-muted)", 
-                    borderRadius: "24px", 
-                    padding: "0.5rem 0.75rem", 
-                    display: "flex", 
-                    alignItems: "center", 
-                    gap: "0.5rem",
-                    boxShadow: "0 8px 30px rgba(0, 0, 0, 0.3)"
-                  }}>
+                  <div className="chatgpt-input-bar">
                     {/* Hidden File Input */}
                     <input 
                       type="file" 
@@ -608,7 +599,7 @@ export default function App() {
                       type="button" 
                       className="icon-button" 
                       onClick={() => fileInputRef.current?.click()}
-                      style={{ color: selectedFile ? "var(--accent-primary)" : "var(--text-secondary)", padding: "0.5rem" }}
+                      style={{ color: selectedFile ? "var(--accent-primary)" : "var(--text-secondary)", padding: "0.5rem", flexShrink: 0 }}
                       title="Upload Local File"
                     >
                       <Upload size={15} />
@@ -618,6 +609,7 @@ export default function App() {
                     {selectedFile ? (
                       <div style={{ 
                         flex: 1, 
+                        minWidth: 0,
                         display: "flex", 
                         alignItems: "center", 
                         justifyContent: "space-between",
@@ -625,7 +617,7 @@ export default function App() {
                         padding: "0.35rem 0.75rem",
                         borderRadius: "16px",
                         border: "1px solid rgba(255, 255, 255, 0.08)",
-                        marginRight: "0.5rem"
+                        marginRight: "0.25rem"
                       }}>
                         <span style={{ fontSize: "0.82rem", color: "var(--text-primary)", fontFamily: "var(--font-mono)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
                           📎 {selectedFile.name}
@@ -633,7 +625,7 @@ export default function App() {
                         <button 
                           type="button" 
                           onClick={() => setSelectedFile(null)}
-                          style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer" }}
+                          style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", flexShrink: 0 }}
                         >
                           <Trash2 size={12} style={{ color: "var(--accent-danger)" }} />
                         </button>
@@ -641,39 +633,18 @@ export default function App() {
                     ) : (
                       <input 
                         type="url" 
+                        className="chatgpt-input-field"
                         value={youtubeUrl}
                         onChange={(e) => setYoutubeUrl(e.target.value)}
                         placeholder="Paste YouTube video URL here..." 
-                        style={{ 
-                          flex: 1, 
-                          background: "transparent", 
-                          border: "none", 
-                          outline: "none", 
-                          color: "var(--text-primary)", 
-                          fontSize: "0.9rem",
-                          padding: "0.5rem 0"
-                        }}
                       />
                     )}
 
                     {/* Language Selector Capsule */}
                     <button 
                       type="button"
+                      className="lang-selector-btn"
                       onClick={() => setLanguage(prev => prev === "english" ? "hinglish" : "english")}
-                      style={{ 
-                        background: "rgba(255, 255, 255, 0.04)", 
-                        border: "1px solid var(--border-muted)", 
-                        borderRadius: "16px", 
-                        padding: "0.35rem 0.75rem", 
-                        color: "var(--text-secondary)", 
-                        fontSize: "0.78rem", 
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.3rem",
-                        transition: "var(--transition-fast)"
-                      }}
                     >
                       <Globe size={11} />
                       <span style={{ textTransform: "capitalize" }}>{language}</span>

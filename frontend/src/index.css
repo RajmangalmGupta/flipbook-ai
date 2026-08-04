@@ -1367,3 +1367,95 @@ body {
     display: flex !important;
   }
 }
+
+/* Central Input Bar and Mobile Hero Adaptations */
+.chatgpt-input-bar {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-muted);
+  border-radius: 24px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chatgpt-input-field {
+  flex: 1;
+  min-width: 0 !important;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.lang-selector-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-muted);
+  border-radius: 16px;
+  padding: 0.35rem 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0 !important;
+  transition: var(--transition-fast);
+}
+
+@media (max-width: 600px) {
+  .spin-hover-image {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .chatgpt-input-bar {
+    padding: 0.35rem 0.55rem !important;
+    gap: 0.3rem !important;
+  }
+
+  .chatgpt-input-field {
+    font-size: 0.8rem !important;
+  }
+
+  .lang-selector-btn {
+    padding: 0.25rem 0.45rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .welcome-hero-title {
+    font-size: 1.15rem !important;
+    padding: 0 0.5rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .workspace-scrollport {
+    padding: 0.75rem !important;
+  }
+
+  .luxury-tabs-bar {
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.3rem !important;
+    scrollbar-width: none;
+  }
+
+  .luxury-tabs-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .luxury-tab-trigger {
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.76rem !important;
+    flex-shrink: 0 !important;
+  }
+}
