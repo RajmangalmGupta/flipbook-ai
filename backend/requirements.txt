@@ -1,3 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 # ── AI Meeting Assistant ── requirements.txt ──────────────────────────────────
 # Python >= 3.10 recommended
 
@@ -8,7 +10,7 @@ ffmpeg-python>=0.2.0              # FFmpeg bindings (FFmpeg binary must be insta
 
 # ── Speech-to-Text (local Whisper) ────────────────────────────────────────────
 openai-whisper>=20231117          # OpenAI Whisper (runs locally)
-torch>=2.2.0                      # PyTorch backend for Whisper
+torch>=2.2.0                      # PyTorch backend for Whisper (CPU build)
 torchaudio>=2.2.0                 # Audio utilities for PyTorch
 
 # ── Translation (Hindi → English) ─────────────────────────────────────────────
@@ -27,11 +29,6 @@ sentence-transformers>=3.0.0      # HuggingFace embedding models
 langchain-huggingface>=0.0.3      # LangChain ↔ HuggingFace embeddings bridge
 huggingface-hub>=0.23.0           # Model downloading from HuggingFace Hub
 tiktoken>=0.7.0                   # Token counting for text splitting
-
-# ── Streamlit UI ──────────────────────────────────────────────────────────────
-streamlit>=1.35.0
-streamlit-extras>=0.4.0           # Additional Streamlit widgets / utilities
-watchdog>=4.0.0                   # File-change watcher (improves Streamlit hot-reload)
 
 # ── PDF & TXT Export ──────────────────────────────────────────────────────────
 reportlab>=4.2.0                  # PDF generation
