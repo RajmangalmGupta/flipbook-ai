@@ -6,10 +6,7 @@ import logging
 from datetime import datetime
 from fastapi import FastAPI, BackgroundTasks, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-
-from main import run_pipeline
-from core.rag_engine import load_rag_chain, ask_question
+from fastapi.responses import FileResponse 
 
 # Initialize FastAPI
 app = FastAPI(title="AI Meeting Assistant API", version="1.0.0")
@@ -64,6 +61,7 @@ def run_pipeline_task(meeting_id: str, source_path: str, is_youtube: bool, langu
 
     try:
         logger.info(f"Starting background RAG pipeline for meeting {meeting_id} (source: {source_path})")
+        from main import run_pipeline
         result = run_pipeline(source_path, language=language, persist_dir=persist_dir)
 
         # Update database with results
@@ -233,6 +231,7 @@ def chat_with_meeting(meeting_id: str, payload: dict):
         raise HTTPException(status_code=500, detail="Meeting vector database not found")
         
     try:
+        from core.rag_engine import load_rag_chain, ask_question
         rag_chain = load_rag_chain(persist_dir=persist_dir)
         answer = ask_question(rag_chain, question)
         return {"answer": answer}
