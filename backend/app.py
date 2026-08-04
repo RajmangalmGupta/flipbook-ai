@@ -134,8 +134,13 @@ def process_meeting(
     """
     Submits a meeting for processing.
     `source` can be a YouTube URL or a local file path returned by `/api/upload`.
-    """
-    is_youtube = source.startswith("http://") or source.startswith("https://")
+    src_clean = source.strip()
+    is_youtube = (
+        src_clean.startswith("http://") or 
+        src_clean.startswith("https://") or 
+        src_clean.startswith("www.") or 
+        (len(src_clean) == 11 and not os.path.exists(src_clean))
+    )
     meeting_id = str(uuid.uuid4())
     
     db = load_db()

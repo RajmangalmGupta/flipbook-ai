@@ -8,6 +8,7 @@ yt-dlp>=2024.12.13                 # Download audio from YouTube URLs
 youtube-transcript-api>=0.6.2     # Fast, unblocked YouTube transcript retrieval API
 pydub>=0.25.1                     # Audio file manipulation / format conversion
 ffmpeg-python>=0.2.0              # FFmpeg bindings (FFmpeg binary must be installed separately)
+static-ffmpeg>=2.5                # Auto-provisions static FFmpeg binary on Linux/Render
 
 # ── Speech-to-Text (local Whisper) ────────────────────────────────────────────
 openai-whisper>=20231117          # OpenAI Whisper (runs locally)
