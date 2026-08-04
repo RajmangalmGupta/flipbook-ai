@@ -17,6 +17,13 @@ def download_youtube_audio(url :str) ->str:
                 "preferredquality": "192",
             }
         ],
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android", "ios", "mweb"]
+            }
+        },
+        "nocheckcertificate": True,
+        "geo_bypass": True,
         "quiet": True,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
