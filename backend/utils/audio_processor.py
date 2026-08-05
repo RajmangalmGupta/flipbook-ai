@@ -1,8 +1,10 @@
+
 import yt_dlp
 from pydub import AudioSegment
 import os
 
 try:
+    # pyrefly: ignore [missing-import]
     import static_ffmpeg
     static_ffmpeg.add_paths()
 except Exception:
@@ -27,6 +29,10 @@ def download_youtube_audio(url :str) ->str:
             "youtube": {
                 "player_client": ["android_vr", "android", "ios", "mweb"]
             }
+        },
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept-Language": "en-US,en;q=0.9",
         },
         "nocheckcertificate": True,
         "geo_bypass": True,
