@@ -67,6 +67,7 @@ def run_pipeline_task(meeting_id: str, source_path: str, is_youtube: bool, langu
     try:
         logger.info(f"Starting background RAG pipeline for meeting {meeting_id} (source: {source_path})")
         from main import run_pipeline
+        # pyrefly: ignore [unexpected-keyword]
         result = run_pipeline(source_path, language=language, persist_dir=persist_dir)
 
         # Update database with results
@@ -87,11 +88,15 @@ def run_pipeline_task(meeting_id: str, source_path: str, is_youtube: bool, langu
     except Exception as e:
         logger.error(f"Failed to process meeting {meeting_id}: {e}")
         logger.error(traceback_format := traceback_formatter(e))
+        err_msg = str(e)
+        if any(term in err_msg.lower() for term in ["sign in to confirm", "login_required", "bot", "429 client error"]):
+            err_msg = "YouTube requires account authentication for this video on cloud servers. Please upload the local audio/video file directly using the 📎 attachment button, or try a public YouTube video link!"
+        
         db = load_db()
         if meeting_id in db:
             db[meeting_id].update({
                 "status": "failed",
-                "error": str(e),
+                "error": err_msg,
                 "completed_at": datetime.now().isoformat(),
             })
             save_db(db)
