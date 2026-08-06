@@ -22,7 +22,11 @@ import {
   Menu
 } from "lucide-react";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || (
+  typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:8000/api"
+    : "https://flipbook-ai-backnd.onrender.com/api"
+);
 
 function SymbolBackground() {
   const canvasRef = useRef(null);
