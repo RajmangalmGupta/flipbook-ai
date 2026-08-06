@@ -38,6 +38,14 @@ def download_youtube_audio(url :str) ->str:
         "geo_bypass": True,
         "quiet": True,
     }
+    
+    cookie_data = os.environ.get("YOUTUBE_COOKIES")
+    if cookie_data:
+        cookie_path = os.path.join(DOWNLOAD_DIR, "cookies.txt")
+        with open(cookie_path, "w", encoding="utf-8") as f:
+            f.write(cookie_data)
+        ydl_opts["cookiefile"] = cookie_path
+
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(info).replace(".webm", ".wav").replace(".m4a", ".wav")
