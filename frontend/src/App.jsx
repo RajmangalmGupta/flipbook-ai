@@ -584,7 +584,7 @@ export default function App() {
                       type="file" 
                       ref={fileInputRef} 
                       onChange={handleFileChange}
-                      accept="audio/*,video/*"
+                      accept="video/*,audio/*,.mp4,.mov,.avi,.mkv,.webm,.m4a,.mp3,.wav,.aac,.flv"
                       style={{ display: "none" }}
                     />
                     

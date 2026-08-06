@@ -54,12 +54,33 @@ def download_youtube_audio(url :str) ->str:
 
 
 def convert_to_wav(input_path: str) -> str:
-    """Convert any audio/video file to WAV format using pydub."""
+    """Convert any audio or video file (.mp4, .mov, .avi, .mkv, .webm, .m4a, .mp3) to 16kHz mono WAV format."""
+    input_path = os.path.abspath(input_path)
     output_path = os.path.splitext(input_path)[0] + "_converted.wav"
-    audio = AudioSegment.from_file(input_path)
-    audio = audio.set_channels(1).set_frame_rate(16000) #16khz
-    audio.export(output_path, format="wav")
-    return output_path
+    
+    try:
+        audio = AudioSegment.from_file(input_path)
+        audio = audio.set_channels(1).set_frame_rate(16000)
+        audio.export(output_path, format="wav")
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            return output_path
+    except Exception as e:
+        print(f"Pydub conversion failed: {e}. Trying direct FFmpeg CLI fallback...")
+
+    try:
+        import subprocess
+        cmd = [
+            "ffmpeg", "-y", "-i", input_path,
+            "-ac", "1", "-ar", "16000", "-vn",
+            output_path
+        ]
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            return output_path
+    except Exception as ffmpeg_err:
+        print(f"FFmpeg CLI conversion failed: {ffmpeg_err}")
+
+    raise RuntimeError(f"Could not convert video/audio file '{input_path}' to WAV format")
 
 
 
