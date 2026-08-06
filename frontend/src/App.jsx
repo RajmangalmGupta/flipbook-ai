@@ -244,6 +244,7 @@ export default function App() {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
+      setSourceType("file");
     }
   };
 
@@ -253,13 +254,7 @@ export default function App() {
     let sourcePath = "";
 
     try {
-      if (sourceType === "file") {
-        if (!selectedFile) {
-          alert("Please upload a local audio/video file");
-          setUploadProgress(null);
-          return;
-        }
-        
+      if (selectedFile) {
         const formData = new FormData();
         formData.append("file", selectedFile);
         
@@ -270,13 +265,12 @@ export default function App() {
         if (!uploadRes.ok) throw new Error("Upload failed");
         const uploadData = await uploadRes.json();
         sourcePath = uploadData.filepath;
+      } else if (youtubeUrl && youtubeUrl.trim()) {
+        sourcePath = youtubeUrl.trim();
       } else {
-        if (!youtubeUrl) {
-          alert("Please provide a YouTube URL");
-          setUploadProgress(null);
-          return;
-        }
-        sourcePath = youtubeUrl;
+        alert("Please enter a YouTube video URL or select a local video/audio file");
+        setUploadProgress(null);
+        return;
       }
 
       setUploadProgress("processing");
