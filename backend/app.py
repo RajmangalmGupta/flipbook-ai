@@ -240,12 +240,14 @@ def chat_with_meeting(meeting_id: str, payload: dict):
         raise HTTPException(status_code=400, detail="Question is required")
         
     persist_dir = os.path.join(CHROMA_DIR, meeting_id)
-    if not os.path.exists(persist_dir):
-        raise HTTPException(status_code=500, detail="Meeting vector database not found")
-        
     try:
-        from core.rag_engine import load_rag_chain, ask_question
-        rag_chain = load_rag_chain(persist_dir=persist_dir)
+        from core.rag_engine import load_rag_chain, build_rag_chain, ask_question
+        if os.path.exists(persist_dir):
+            rag_chain = load_rag_chain(persist_dir=persist_dir)
+        else:
+            logger.info(f"Vector store missing for meeting {meeting_id}, auto-rebuilding from transcript...")
+            rag_chain = build_rag_chain(meeting.get("transcript", ""), persist_dir=persist_dir)
+            
         answer = ask_question(rag_chain, question)
         return {"answer": answer}
     except Exception as e:
