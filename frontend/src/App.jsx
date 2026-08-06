@@ -677,6 +677,38 @@ export default function App() {
                   </div>
                 </form>
 
+                {/* OR Divider & Prominent Local File Upload Button */}
+                <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.75rem", justifyContent: "center", width: "100%" }}>
+                  <div style={{ flex: 1, height: "1px", background: "rgba(255, 255, 255, 0.08)" }} />
+                  <span style={{ fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>OR</span>
+                  <div style={{ flex: 1, height: "1px", background: "rgba(255, 255, 255, 0.08)" }} />
+                </div>
+
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    marginTop: "0.85rem",
+                    width: "100%",
+                    padding: "0.8rem 1rem",
+                    background: selectedFile ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.02)",
+                    border: selectedFile ? "1px solid var(--accent-primary)" : "1px dashed rgba(255, 255, 255, 0.15)",
+                    borderRadius: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.6rem",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    boxSizing: "border-box"
+                  }}
+                  className="upload-dropzone-button"
+                >
+                  <Upload size={16} style={{ color: selectedFile ? "var(--accent-primary)" : "var(--text-secondary)" }} />
+                  <span style={{ fontSize: "0.83rem", fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {selectedFile ? `Selected: ${selectedFile.name}` : "Upload Local Video or Audio File (.mp4, .m4a, .mp3)"}
+                  </span>
+                </div>
+
                 {uploadProgress && (
                   <div style={{ marginTop: "1rem" }}>
                     <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
